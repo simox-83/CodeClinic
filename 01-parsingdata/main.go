@@ -36,11 +36,29 @@ func main() {
 	}
 
 	//fmt.Printf("primo valore di temperatura e' %v\n", records[1][0])
-	var tottemp = 0.0
-	var totpres = 0.0
-	var totvent = 0.0
-	var conta = 0.0
-	for i, row := range records {
+	MeanTemp, MeanPressure, MeanWind := mean(records)
+	fmt.Println("La temperatura media e' stata di", MeanTemp)
+	fmt.Println("La pressione media e' stata di", MeanPressure)
+	fmt.Println("Il vento medio e' stato di", MeanWind)
+
+	//fmt.Print(records)
+
+	//now we need to sort
+	sortedTemp, sortedPressure, sortedWind := sortMatrix(records)
+	MedianTemp := median(sortedTemp)
+	MedianPressure := median(sortedPressure)
+	MedianWind := median(sortedWind)
+
+	fmt.Println("La mediana delle temperature e'", MedianTemp)
+	fmt.Println("La mediana delle pressioni e'", MedianPressure)
+	fmt.Println("La mediana del vento e'", MedianWind)
+
+}
+
+func mean(matrix [][]string) (float64, float64, float64) {
+	var tottemp, totpres, totvent, conta float64
+
+	for i, row := range matrix {
 		if i != 0 {
 			temperatura, _ := strconv.ParseFloat(row[1], 64)
 			pressione, _ := strconv.ParseFloat(row[2], 64)
@@ -51,15 +69,12 @@ func main() {
 			conta++
 		}
 	}
-	fmt.Println("La temperatura media e' stata di", (tottemp / conta))
-	fmt.Println("La pressione media e' stata di", totpres/conta)
-	fmt.Println("Il vento medio e' stato di", totvent/conta)
+	return tottemp / conta, totpres / conta, totvent / conta
+}
 
-	//fmt.Print(records)
-
-	//now we need to sort
+func sortMatrix(matrix [][]string) ([]float64, []float64, []float64) {
 	var sortedTemp, sortedPressure, sortedWind []float64
-	for i, row := range records {
+	for i, row := range matrix {
 		if i != 0 {
 			temperature, _ := strconv.ParseFloat(row[1], 64)
 			pressure, _ := strconv.ParseFloat(row[2], 64)
@@ -69,15 +84,20 @@ func main() {
 			sortedWind = append(sortedWind, wind)
 		}
 	}
-	var medianTemp float64
-	if len(sortedTemp)%2 != 0 {
-		medianTemp = sortedTemp[len(sortedTemp)/2]
+	return sortedTemp, sortedPressure, sortedWind
+}
+
+func median(f []float64) float64 {
+
+	var mdn float64
+	if len(f)%2 != 0 {
+		mdn = f[len(f)/2]
 	} else {
-		middle := len(sortedTemp) / 2
-		higher := sortedTemp[middle]
-		lower := sortedTemp[middle-1]
-		medianTemp = higher + lower/2
+		middle := len(f) / 2
+		higher := f[middle]
+		lower := f[middle-1]
+		mdn = higher + lower/2
 
 	}
-	fmt.Println("Median temp is", medianTemp)
+	return mdn
 }

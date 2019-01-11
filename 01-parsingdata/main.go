@@ -36,24 +36,10 @@ func main() {
 	}
 
 	//fmt.Printf("primo valore di temperatura e' %v\n", records[1][0])
-	var tottemp = 0.0
-	var totpres = 0.0
-	var totvent = 0.0
-	var conta = 0.0
-	for i, row := range records {
-		if i != 0 {
-			temperatura, _ := strconv.ParseFloat(row[1], 64)
-			pressione, _ := strconv.ParseFloat(row[2], 64)
-			vento, _ := strconv.ParseFloat(row[7], 64)
-			tottemp = temperatura + tottemp
-			totpres = pressione + totpres
-			totvent = vento + totvent
-			conta++
-		}
-	}
-	fmt.Println("La temperatura media e' stata di", (tottemp / conta))
-	fmt.Println("La pressione media e' stata di", totpres/conta)
-	fmt.Println("Il vento medio e' stato di", totvent/conta)
+	MeanTemp, MeanPressure, MeanWind := mean(records)
+	fmt.Println("La temperatura media e' stata di", MeanTemp)
+	fmt.Println("La pressione media e' stata di", MeanPressure)
+	fmt.Println("Il vento medio e' stato di", MeanWind)
 
 	//fmt.Print(records)
 
@@ -80,4 +66,23 @@ func main() {
 
 	}
 	fmt.Println("Median temp is", medianTemp)
+}
+
+func mean(matrix [][]string) (float64, float64, float64) {
+	var tottemp = 0.0
+	var totpres = 0.0
+	var totvent = 0.0
+	var conta = 0.0
+	for i, row := range matrix {
+		if i != 0 {
+			temperatura, _ := strconv.ParseFloat(row[1], 64)
+			pressione, _ := strconv.ParseFloat(row[2], 64)
+			vento, _ := strconv.ParseFloat(row[7], 64)
+			tottemp = temperatura + tottemp
+			totpres = pressione + totpres
+			totvent = vento + totvent
+			conta++
+		}
+	}
+	return tottemp / conta, totpres / conta, totvent / conta
 }

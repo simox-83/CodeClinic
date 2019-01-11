@@ -35,13 +35,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//fmt.Printf("primo valore di temperatura e' %v\n", records[1][0])
 	MeanTemp, MeanPressure, MeanWind := mean(records)
 	fmt.Println("La temperatura media e' stata di", MeanTemp)
 	fmt.Println("La pressione media e' stata di", MeanPressure)
 	fmt.Println("Il vento medio e' stato di", MeanWind)
-
-	//fmt.Print(records)
 
 	//now we need to sort
 	sortedTemp, sortedPressure, sortedWind := sortMatrix(records)

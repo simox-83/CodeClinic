@@ -56,15 +56,16 @@ func mean(matrix [][]string) (float64, float64, float64) {
 	var tottemp, totpres, totvent, conta float64
 
 	for i, row := range matrix {
-		if i != 0 {
-			temperatura, _ := strconv.ParseFloat(row[1], 64)
-			pressione, _ := strconv.ParseFloat(row[2], 64)
-			vento, _ := strconv.ParseFloat(row[7], 64)
-			tottemp = temperatura + tottemp
-			totpres = pressione + totpres
-			totvent = vento + totvent
-			conta++
+		if i == 0 {
+			continue
 		}
+		temperatura, _ := strconv.ParseFloat(row[1], 64)
+		pressione, _ := strconv.ParseFloat(row[2], 64)
+		vento, _ := strconv.ParseFloat(row[7], 64)
+		tottemp = temperatura + tottemp
+		totpres = pressione + totpres
+		totvent = vento + totvent
+		conta++
 	}
 	return tottemp / conta, totpres / conta, totvent / conta
 }

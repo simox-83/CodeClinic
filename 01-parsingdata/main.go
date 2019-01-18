@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -73,15 +74,21 @@ func mean(matrix [][]string) (float64, float64, float64) {
 func sortMatrix(matrix [][]string) ([]float64, []float64, []float64) {
 	var sortedTemp, sortedPressure, sortedWind []float64
 	for i, row := range matrix {
-		if i != 0 {
-			temperature, _ := strconv.ParseFloat(row[1], 64)
-			pressure, _ := strconv.ParseFloat(row[2], 64)
-			wind, _ := strconv.ParseFloat(row[7], 64)
-			sortedTemp = append(sortedTemp, temperature)
-			sortedPressure = append(sortedPressure, pressure)
-			sortedWind = append(sortedWind, wind)
+		if i == 0 {
+			continue
 		}
+
+		temperature, _ := strconv.ParseFloat(row[1], 64)
+		pressure, _ := strconv.ParseFloat(row[2], 64)
+		wind, _ := strconv.ParseFloat(row[7], 64)
+
+		sortedTemp = append(sortedTemp, temperature)
+		sortedPressure = append(sortedPressure, pressure)
+		sortedWind = append(sortedWind, wind)
 	}
+	sort.Float64s(sortedTemp)
+	sort.Float64s(sortedPressure)
+	sort.Float64s(sortedWind)
 	return sortedTemp, sortedPressure, sortedWind
 }
 

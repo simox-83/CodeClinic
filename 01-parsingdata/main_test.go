@@ -57,3 +57,33 @@ func TestSortMatrix(t *testing.T) {
 	}
 
 }
+
+func TestMedian(t *testing.T) {
+	type ss struct {
+		desc  string
+		input []float64
+		exp   float64
+	}
+	table := []ss{
+		{
+			"Median with odd elements is wrong",
+			[]float64{
+				1, 2, 3, 4, 5,
+			},
+			3,
+		},
+		{
+			"Median with even elements is wrong",
+			[]float64{
+				1, 2, 3, 4,
+			},
+			2.5,
+		},
+	}
+
+	for _, el := range table {
+		res := median(el.input)
+		assert.Equal(t, el.exp, res, el.desc)
+
+	}
+}

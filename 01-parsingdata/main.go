@@ -101,7 +101,7 @@ func median(f []float64) float64 {
 		middle := len(f) / 2
 		higher := f[middle]
 		lower := f[middle-1]
-		mdn = higher + lower/2
+		mdn = (higher + lower) / 2
 
 	}
 	return mdn

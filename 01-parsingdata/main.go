@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"sort"
@@ -28,9 +29,7 @@ func main() {
 	defer file.Close()
 	//fmt.Printf("File opened, %v", file)
 
-	r := csv.NewReader(file)
-	r.Comma = '\t'
-	records, err := r.ReadAll()
+	records, err := read(file)
 
 	if err != nil {
 		log.Fatal(err)
@@ -105,4 +104,12 @@ func median(f []float64) float64 {
 
 	}
 	return mdn
+}
+
+func read(r io.Reader) ([][]string, error) {
+	f := csv.NewReader(r)
+	f.Comma = '\t'
+	records, err := f.ReadAll()
+
+	return records, err
 }

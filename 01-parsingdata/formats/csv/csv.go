@@ -10,10 +10,11 @@ type Getter interface {
 	Get() (io.ReadCloser, error)
 }
 
-func Read(r io.Reader) ([][]string, error) {
-	f := csv.NewReader(r)
-	f.Comma = '\t'
-	records, err := f.ReadAll()
+func Read(g Getter) ([][]string, error) {
+	f, _ := g.Get()
+	r := csv.NewReader(f)
+	r.Comma = '\t'
+	records, err := r.ReadAll()
 
 	return records, err
 }

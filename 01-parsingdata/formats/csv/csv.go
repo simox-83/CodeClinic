@@ -11,7 +11,10 @@ type Getter interface {
 }
 
 func Read(g Getter) ([][]string, error) {
-	f, _ := g.Get()
+	f, err := g.Get()
+	if err != nil {
+		return nil, err
+	}
 	r := csv.NewReader(f)
 	r.Comma = '\t'
 	records, err := r.ReadAll()

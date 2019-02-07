@@ -15,6 +15,8 @@ func Read(g Getter) ([][]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
+
 	r := csv.NewReader(f)
 	r.Comma = '\t'
 	records, err := r.ReadAll()

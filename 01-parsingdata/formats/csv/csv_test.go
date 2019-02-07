@@ -3,11 +3,11 @@ package csv_test
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/simox-83/CodeClinic/01-parsingdata/formats/csv"
 )
@@ -16,17 +16,19 @@ func TestRead(t *testing.T) {
 
 	t.Run("Success test", func(t *testing.T) {
 		assert := assert.New(t)
-
-		table, err := csv.Read(&testGetter{
+		getter := &testGetter{
 			data: `date	time	Air_Temp	Barometric_Press	Dew_Point	Relative_Humidity	Wind_Dir	Wind_Gust	Wind_Speed
 2015_01_01	00:02:43	19.50	30.62	14.78	81.60	159.78	14.00	 9.20
 2015_01_01	00:02:52	19.50	30.62	14.78	81.60	159.78	14.00	 9.20
-2015_01_01	00:07:43	19.50	30.61	14.66	81.20	155.63	11.00	 8.60`})
+2015_01_01	00:07:43	19.50	30.61	14.66	81.20	155.63	11.00	 8.60`}
+		table, err := csv.Read(getter)
 
 		assert.IsType([][]string{}, table)
 		assert.NoError(err)
 
-		assert.Len(table, 4)
+		assert.Equal(1, getter.rc.closecalled, "close hasn't been called")
+
+		require.Len(t, table, 4)
 		assert.Len(table[1], 9)
 
 		assert.Equal(table[3][4], "14.66")
@@ -42,7 +44,6 @@ func TestRead(t *testing.T) {
 
 		assert.EqualError(err, g.err.Error())
 		assert.Nil(table)
-
 	})
 
 	t.Run("Error2", func(t *testing.T) {
@@ -55,18 +56,38 @@ func TestRead(t *testing.T) {
 
 		assert.EqualError(err, g.err.Error())
 		assert.Nil(table)
-
 	})
 }
 
 type testGetter struct {
 	data string
 	err  error
+
+	rc *testReadClose
 }
 
 func (g *testGetter) Get() (io.ReadCloser, error) {
 	if g.err != nil {
 		return nil, g.err
 	}
-	return ioutil.NopCloser(strings.NewReader(g.data)), nil
+	c := &testReadClose{reader: strings.NewReader(g.data)}
+	g.rc = c
+	return c, nil
+}
+
+type testReadClose struct {
+	closecalled int
+	reader      io.Reader
+}
+
+func (rc *testReadClose) Read(p []byte) (int, error) {
+	if rc.closecalled > 0 {
+		return 0, errors.New("reader closed")
+	}
+	return rc.reader.Read(p)
+}
+
+func (rc *testReadClose) Close() error {
+	rc.closecalled++
+	return nil
 }

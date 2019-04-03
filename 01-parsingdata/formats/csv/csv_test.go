@@ -48,7 +48,6 @@ func TestRead(t *testing.T) {
 		table, err := csv.Read(m)
 
 		assert.Nil(rc)
-		// sembra che la Get non venga chiamata?
 		m.AssertNumberOfCalls(t, "Get", 1)
 
 		assert.EqualError(err, sampleErr.Error())
@@ -66,7 +65,6 @@ func TestRead(t *testing.T) {
 		table, err := csv.Read(m)
 
 		rc.AssertNumberOfCalls(t, "Close", 0)
-		// sembra che la Get non venga chiamata?
 		m.AssertNumberOfCalls(t, "Get", 1)
 
 		assert.EqualError(err, sampleErr.Error())

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"io"
 	"log"
-	"os"
 	"sort"
 	"strconv"
+
+	"github.com/simox-83/CodeClinic/01-parsingdata/formats/csv"
+	"github.com/simox-83/CodeClinic/01-parsingdata/resources"
 )
 
 func main() {
@@ -22,14 +22,9 @@ func main() {
 	       r := csv.NewReader(url.Body)
 	*/
 
-	file, err := os.Open("Environmental_Data_Deep_Moor_2015.txt") // For read access.
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	//fmt.Printf("File opened, %v", file)
-
-	records, err := read(file)
+	records, err := csv.Read(&resources.File{
+		Name: "Environmental_Data_Deep_Moor_2015.txt",
+	})
 
 	if err != nil {
 		log.Fatal(err)
@@ -104,12 +99,4 @@ func median(f []float64) float64 {
 
 	}
 	return mdn
-}
-
-func read(r io.Reader) ([][]string, error) {
-	f := csv.NewReader(r)
-	f.Comma = '\t'
-	records, err := f.ReadAll()
-
-	return records, err
 }

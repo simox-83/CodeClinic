@@ -6,10 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/simox-83/CodeClinic/01-parsingdata/formats/csv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/simox-83/CodeClinic/01-parsingdata/formats/csv"
 )
 
 func TestRead(t *testing.T) {
